@@ -1,0 +1,45 @@
+Sub VlookMultipleWorkbooks()
+
+    Dim lookFor As Range
+    Dim srchRange As Range
+
+    Dim bk1 As Workbook
+    Dim bk2 As Workbook
+
+    Dim bk2Name As String
+    bk2Name = "prova.xlsx"    
+
+    Dim bk2NamePath As String
+    bk2NamePath = ThisWorkbook.Path & "\" & bk2Name
+
+    Set bk1 = ThisWorkbook
+
+    If IsOpen(bk2Name) = False Then Workbooks.Open (bk2NamePath)
+    Set bk2 = Workbooks(bk2Name)
+
+
+    Set lookFor = bk1.Sheets(1).Cells(2, 1)   
+    Set srchRange = bk2.Sheets(1).Range("B:C")    
+
+    lookFor.Offset(0, 1).Value = Application.VLookup(lookFor, srchRange, 2, False)
+
+End Sub
+
+Function IsOpen(strWkbNm As String) As Boolean
+
+    On Error Resume Next
+
+    Dim wBook As Workbook
+    Set wBook = Workbooks(strWkbNm)
+
+    If wBook Is Nothing Then   
+        IsOpen = False
+        Set wBook = Nothing
+        On Error GoTo 0
+    Else
+        IsOpen = True
+        Set wBook = Nothing
+        On Error GoTo 0
+    End If
+
+End Function
